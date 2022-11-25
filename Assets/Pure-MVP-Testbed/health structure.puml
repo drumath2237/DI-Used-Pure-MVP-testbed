@@ -1,0 +1,114 @@
+﻿@startuml Structure
+
+namespace Health{
+    
+    interface IHealthModel{
+        + IReadOnlyReactiveProperty<int> CurrentHealth
+        + void Decrement(int amount)
+        + void Increment(int amount)
+        + void Reset()
+    }
+    
+    interface IHealthPresenter{
+        + void Decrement(int amount)
+        + void Increment(int amount)
+        + void Reset()
+    }
+    
+    interface IHealthView{
+        + void SetHealthValue(int health)
+    }
+    
+    class HealthModel{
+        + IReadOnlyReactiveProperty<int> CurrentHealth
+        + void Decrement(int amount)
+        + void Increment(int amount)
+        + void Reset()
+        + HealthModel(int min, int max)
+        - ReactiveProperty<int> _currentHealth
+    }
+    
+    IHealthModel<|--HealthModel
+    
+    class HealthView<<MonoBehaviour>>{
+        + HealthView(Slider healthSlider, Text healthLabel)
+        + void SetHealthValue(int health)
+        - Slider _healthSlider
+        - Text _healthLabel
+    }
+    
+    IHealthView<|--HealthView
+    
+    class HeadlessHealthView{
+        + void SetHealthValue(int health)s
+    }
+    
+    IHealthView<|--HeadlessHealthView
+    
+    class HealthPresenter{
+        + HealthPresenter(IHealthModel model, IHealthView view)
+        - IHealthModel _model
+        - IHealthView _view
+        + void Decrement(int amount)
+        + void Increment(int amount)
+        + void Reset()
+        + void Start()
+    }
+    
+    IHealthPresenter<|--HealthPresenter
+    
+    HealthPresenter::_view-->IHealthView
+    HealthPresenter::_model-->IHealthModel
+}
+
+namespace Game{
+
+    interface IGameModel{}
+    class GameModel{}
+    IGameModel<|--GameModel
+    
+    interface IGameView{
+        + Action<int> OnDamage
+        + Action OnReset
+    }
+    
+    class GameView<<MonoBehaviour>>{
+        - [SerializeField] Button damageButton
+        - [SerializeField] Button resetButton
+        - [SerializeField] int damageAmount
+        + Action<int> OnDamage
+        + Action OnReset
+    }
+    
+    class HeadlessGameView{
+        + Action<int> OnDamage
+        + Action OnReset
+    }
+    
+    IGameView<|--GameView
+    IGameView<|--HeadlessGameView
+    
+    class GamePresenter<<EntryPoint>>{
+        + GamePresenter(\n\tIGameModel model,\n\tIGameView view, \n\tIHealthPresenter healthPresenter\n)
+        - IGameModel _model
+        - IGameView _view
+        - IHealthPresenter _healthPresenter
+        + Start()
+    }
+    
+    IStartable<|--GamePresenter
+    GamePresenter::_model-->IGameModel
+    GamePresenter::_view-->IGameView
+    GamePresenter::_healthPresenter-->Health.IHealthPresenter
+    
+}
+
+class GameLifetimeScope{
+    + void Configure(IContainerBuilder builder)
+    - [SerializeField] HealthView healthView
+    - [SerializeField] GameView gameView
+}
+
+LifetimeScope<|--GameLifetimeScope
+
+@enduml
