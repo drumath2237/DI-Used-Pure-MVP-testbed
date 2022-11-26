@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.cysharp.unitask": "2.3.3",
     "com.neuecc.unirx": "7.1.0",
     "com.unity.feature.development": "1.0.1",
     "com.unity.ide.rider": "3.0.16",
@@ -34,7 +33,6 @@
       "name": "OpenUPM",
       "url": "https://package.openupm.com",
       "scopes": [
-        "com.cysharp.unitask",
         "com.neuecc.unirx",
         "jp.hadashikick.vcontainer"
       ]
