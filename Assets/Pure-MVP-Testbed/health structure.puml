@@ -31,7 +31,6 @@ namespace Health{
     IHealthModel<|--HealthModel
     
     class HealthView<<MonoBehaviour>>{
-        + HealthView(Slider healthSlider, Text healthLabel)
         + void SetHealthValue(int health)
         - Slider _healthSlider
         - Text _healthLabel

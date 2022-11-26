@@ -1,4 +1,5 @@
-﻿using UniRx;
+﻿using System;
+using UniRx;
 
 namespace PureMVPTestbed.Health
 {
@@ -22,30 +23,41 @@ namespace PureMVPTestbed.Health
         void SetHealthValue(int health);
     }
 
-    public class HealthPresenter : IHealthPresenter
+    public class HealthPresenter : IHealthPresenter, IDisposable
     {
-        private IHealthModel _model;
-        private IHealthView _view;
-        
+        private readonly IHealthModel _model;
+        private readonly IHealthView _view;
+
+        private readonly CompositeDisposable _disposable = new();
+
         public HealthPresenter(IHealthModel model, IHealthView view)
         {
             _model = model;
             _view = view;
+
+            _model.CurrentHealth
+                .Subscribe(_view.SetHealthValue)
+                .AddTo(_disposable);
         }
-        
+
         public void Decrement(int amount)
         {
-            throw new System.NotImplementedException();
+            _model.Decrement(amount);
         }
 
         public void Increment(int amount)
         {
-            throw new System.NotImplementedException();
+            _model.Increment(amount);
         }
 
         public void Reset()
         {
-            throw new System.NotImplementedException();
+            _model.Reset();
+        }
+
+        public void Dispose()
+        {
+            _disposable.Dispose();
         }
     }
 }
