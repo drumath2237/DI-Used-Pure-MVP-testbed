@@ -21,6 +21,7 @@ namespace PureMVPTestbed.Health
         {
             if (_currentHealth.Value - amount < _minValue)
             {
+                _currentHealth.Value = _minValue;
                 return;
             }
 
@@ -31,6 +32,7 @@ namespace PureMVPTestbed.Health
         {
             if (_currentHealth.Value + amount > _maxValue)
             {
+                _currentHealth.Value = _maxValue;
                 return;
             }
 

@@ -17,9 +17,9 @@ namespace PureMVPTestbed.Game
     public class GamePresenter : IStartable, IDisposable
     {
         private IGameModel _gameModel;
-        private IGameView _gameView;
+        private readonly IGameView _gameView;
 
-        private IHealthPresenter _healthPresenter;
+        private readonly IHealthPresenter _healthPresenter;
 
         public GamePresenter(IGameModel gameModel, IGameView gameView, IHealthPresenter healthPresenter)
         {
