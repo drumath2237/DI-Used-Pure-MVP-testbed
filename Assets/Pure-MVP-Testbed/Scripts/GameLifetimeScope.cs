@@ -27,7 +27,7 @@ namespace PureMVPTestbed.Game
                 Lifetime.Singleton
             );
 
-            builder.RegisterBuildCallback(container =>
+            builder.RegisterBuildCallback(_ =>
             {
                 healthView.SetSliderMinMaxValue(min: minHealth, max: maxHealth);
             });
